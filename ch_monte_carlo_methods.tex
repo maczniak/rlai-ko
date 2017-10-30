@@ -1,0 +1,37 @@
+
+\chapter{몬테카를로 기법}\label{ch:monte-carlo-methods}
+
+\begin{equation*}
+\pi_0 \xrightarrow{\hspace{0.4em}\text{E}\hspace{0.4em}} q_{\pi_0} \xrightarrow{\hspace{0.4em}\text{I}\hspace{0.4em}}
+ \pi_1 \xrightarrow{\hspace{0.4em}\text{E}\hspace{0.4em}} q_{\pi_1} \xrightarrow{\hspace{0.4em}\text{I}\hspace{0.4em}}
+ \pi_2 \xrightarrow{\hspace{0.4em}\text{E}\hspace{0.4em}} \cdots \xrightarrow{\hspace{0.4em}\text{I}\hspace{0.4em}}
+ \pi_\ast \xrightarrow{\hspace{0.4em}\text{E}\hspace{0.4em}} q_\ast
+\end{equation*}
+
+\begin{equation}
+\pi(s) \doteq \argmax_a q(s,a).
+\end{equation}
+
+\begin{align*}
+q_{\pi_k}(s,\pi_{k+1}(s)) &= q_{\pi_k}(s,\argmax_a q_{\pi_k}(s,a)) \\
+ &= \max_a q_{\pi_k}(s,a) \\
+ &\geq q_{\pi_k}(s,\pi_k(s)) \\
+ &\geq v_{\pi_k}(s).
+\end{align*}
+
+\begin{align}
+q_\pi(s,\pi'(s)) &= \sum_a \pi'(a|s)q_\pi(s,a) \nonumber\\
+ &= \frac{\epsilon}{|\mathcal{A}(s)|} \sum_a q_\pi(s,a) + (1-\epsilon)\max_a q_\pi(s,a) \\
+ &\geq \frac{\epsilon}{|\mathcal{A}(s)|} \sum_a q_\pi(s,a) + (1-\epsilon)\sum_a \frac{\pi(a|s) - \frac{\epsilon}{|\mathcal{A}(s)|}}{1-\epsilon}q_\pi(s,a) \nonumber
+\intertext{(the sum is a weighted average with nonnegative weights summing to 1,
+ and as such it must be less than or equal to the largest number averaged)}
+ &= \frac{\epsilon}{|\mathcal{A}(s)|} \sum_a q_\pi(s,a) - \frac{\epsilon}{|\mathcal{A}(s)|} \sum_a q_\pi(s,a) + \sum_a \pi(a|s)q_\pi(s,a) \nonumber\\
+ &= v_\pi(s). \nonumber
+\end{align}
+
+\begin{align*}
+\tilde{v}_\ast(s) &= (1-\epsilon)\max_a \tilde{q}_\ast(s,a) + \frac{\epsilon}{|\mathcal{A}(s)|} \sum_a \tilde{q}_\ast(s,a) \\
+ &= (1-\epsilon)\max_a \sum_{s',r} p(s',r|s,a) \Big[r+\gamma\tilde{v}_\ast(s')\Big] \\
+ &\qquad + \frac{\epsilon}{|\mathcal{A}(s)|} \sum_a \sum_{s',r} p(s',r|s,a) \Big[r+\gamma\tilde{v}_\ast(s')\Big].
+\end{align*}
+

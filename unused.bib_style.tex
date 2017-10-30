@@ -1,0 +1,173 @@
+\usepackage{xpatch}
+\usepackage[style=authoryear-comp,minbibnames=99,maxbibnames=99,dashed=false,backref=true,backrefstyle=none]{biblatex}
+%\usepackage[bibstyle=authoryear,citestyle=authoryear-comp]{biblatex}
+%\usepackage[style=authoryear]{biblatex}
+
+% https://tex.stackexchange.com/questions/168077/change-the-order-of-the-address-and-publisher-in-biblatex
+\renewbibmacro*{publisher+location+date}{%
+  \printlist{publisher}%
+  \iflistundef{location}
+    {\setunit*{\addcomma\space}}
+    %{\setunit*{\addcolon\space}}%
+    {\setunit*{\addcomma\space}}%
+  \printlist{location}%
+  \setunit*{\addcomma\space}%
+  \usebibmacro{date}%
+  \newunit}
+
+% https://tex.stackexchange.com/questions/249010/adding-comma-after-journal-name-in-biblatex
+\DeclareFieldFormat{journaltitle}{\mkbibemph{#1}\isdot}
+
+\renewbibmacro*{journal+issuetitle}{%
+  \usebibmacro{journal}%
+  \setunit*{\addcomma\space}%
+  \iffieldundef{series}
+    {}
+    {\newunit
+     \printfield{series}%
+     \setunit{\addspace}}%
+  \usebibmacro{volume+number+eid}%
+  \setunit{\addspace}%
+  \usebibmacro{issue+date}%
+  \setunit{\addcolon\space}%
+  \usebibmacro{issue}%
+  \newunit}
+
+% https://tex.stackexchange.com/questions/10682/suppress-in-biblatex
+\renewbibmacro{in:}{%
+  \ifentrytype{article}{}{\printtext{\bibstring{in}\intitlepunct}}}
+
+% https://groups.google.com/forum/#!topic/comp.text.tex/XH48QoG3pVg
+\DeclareFieldFormat[article, inbook, inproceedings]{title}{#1}
+
+% https://tex.stackexchange.com/questions/248915/biblatex-in-bibliography-first-authors-last-name-comes-first-other-authors
+\DeclareNameAlias{author}{last-first}
+
+% https://tex.stackexchange.com/questions/197435/change-author-separator-and-delete-in-bibliography-biblatex
+\AtBeginBibliography{\renewcommand{\finalnamedelim}{\multinamedelim}}
+
+% https://tex.stackexchange.com/questions/197435/change-author-separator-and-delete-in-bibliography-biblatex
+\renewbibmacro*{finentry}{\iflistundef{pageref}{}{\renewcommand{\finentrypunct}{}}\finentry}
+
+\renewbibmacro*{pageref}{%
+  \iflistundef{pageref}
+    {}
+    {\setunit{\adddot\addspace}\printtext{%
+%  \fbox{
+  \mkbibparens{%
+       \ifnumgreater{\value{pageref}}{1}
+         {\bibstring{backrefpages}\ppspace}
+     {\bibstring{backrefpage}\ppspace}%
+       \printlist[pageref][-\value{listtotal}]{pageref}
+  }}}}
+
+% https://tex.stackexchange.com/questions/134063/how-to-add-a-comma-between-author-and-year
+\renewcommand*{\nameyeardelim}{\addcomma\space}
+
+% https://tex.stackexchange.com/questions/81569/biblatex-parentheses-around-the-volume-number-of-an-article
+\renewbibmacro*{volume+number+eid}{%
+  \printfield{volume}%
+%  \setunit*{\adddot}% DELETED
+  \printfield{number}%
+  \setunit{\addcomma\space}%
+  \printfield{eid}}
+\DeclareFieldFormat[article]{number}{\mkbibparens{#1}}
+
+% https://tex.stackexchange.com/questions/172241/biblatex-suppress-colon-after-in-for-edited-volumes
+\renewcommand*{\intitlepunct}{\space}
+
+% https://tex.stackexchange.com/questions/173638/move-names-of-editors-followed-by-ed-eds-and-a-comma-before-title-in-biblate
+\renewbibmacro*{editorstrg}{%from biblatex.def
+  \printtext[editortype]{%
+    \iffieldundef{editortype}
+      {\ifboolexpr{
+         test {\ifnumgreater{\value{editor}}{1}}
+         or
+         test {\ifandothers{editor}}
+       }
+% https://tex.stackexchange.com/questions/314489/capitalize-editortype-field
+         %{\bibcpstring{editors}}%changed
+         {\bibstring{editors}}%changed
+         %{\bibcpstring{editor}}}%changed
+         {\bibstring{editor}}}%changed
+      {\ifbibxstring{\thefield{editortype}}
+         {\ifboolexpr{
+            test {\ifnumgreater{\value{editor}}{1}}
+            or
+            test {\ifandothers{editor}}
+          }
+            {\bibcpstring{\thefield{editortype}s}}%changed
+            {\bibcpstring{\thefield{editortype}}}}%changed
+         {\thefield{editortype}}}}}
+
+\renewbibmacro*{byeditor+others}{%from biblatex.def
+  \ifnameundef{editor}
+    {}
+    {\printnames[byeditor]{editor}%
+     \addspace%added
+     \mkbibparens{\usebibmacro{editorstrg}}%added
+     \clearname{editor}%
+     \newunit}%
+  \usebibmacro{byeditorx}%
+  \usebibmacro{bytranslator+others}}
+
+%\DeclareBibliographyDriver{incollection}{%from standard.bbx
+\DeclareBibliographyDriver{inbook}{%from standard.bbx
+  \usebibmacro{bibindex}%
+  \usebibmacro{begentry}%
+  \usebibmacro{author/translator+others}%
+  \setunit{\labelnamepunct}\newblock
+  \usebibmacro{title}%
+  \newunit
+  \printlist{language}%
+  \newunit\newblock
+  \usebibmacro{byauthor}%
+  \newunit\newblock
+  %\usebibmacro{in:}%changed
+  \printtext{In}\addspace%
+  \usebibmacro{byeditor+others}%changed
+  \setunit{\addcomma\addspace}\newblock%changed
+  \usebibmacro{maintitle+booktitle}%
+  \newunit\newblock
+  \printfield{edition}%
+  \newunit
+  \iffieldundef{maintitle}
+    {\printfield{volume}%
+     \printfield{part}}
+    {}%
+  \newunit
+  \printfield{volumes}%
+  \newunit\newblock
+  \usebibmacro{series+number}%
+  \newunit\newblock
+  \printfield{note}%
+  \newunit\newblock
+  %\usebibmacro{publisher+location+date}%
+  %\newunit\newblock
+  \usebibmacro{chapter+pages}%
+  \newunit\newblock
+  \usebibmacro{publisher+location+date}%
+  \newunit\newblock
+  \iftoggle{bbx:isbn}
+    {\printfield{isbn}}
+    {}%
+  \newunit\newblock
+  \usebibmacro{doi+eprint+url}%
+  \newunit\newblock
+  \usebibmacro{addendum+pubstate}%
+  \setunit{\bibpagerefpunct}\newblock
+  \usebibmacro{pageref}%
+  %\newunit\newblock
+  \iftoggle{bbx:related}
+    {\usebibmacro{related:init}%
+     \usebibmacro{related}}
+    {}%
+  \usebibmacro{finentry}}
+
+% ? https://tex.stackexchange.com/questions/230480/add-colon-after-volume-number
+\renewcommand*{\bibpagespunct}{\ifentrytype{article}{\addcolon}{\addcomma\space}}
+%\renewcommand*{\bibpagespunct}{\ifentrytype{article}{\addcolon}{\addperiod\addspace}}
+% ? https://tex.stackexchange.com/questions/40023/biblatex-no-pages-for-article
+\DeclareFieldFormat[article]{pages}{#1}
+%\DeclareFieldFormat[article, incollection, unpublished]{pages}{#1}
+

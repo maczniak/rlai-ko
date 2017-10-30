@@ -1,0 +1,33 @@
+
+\renewcommand*{\nameyeardelim}{\addcomma\space}
+\DeclareNameAlias{author}{last-first}
+
+\addbibresource{rlai.bib}
+
+\DeclareBibliographyAlias{customa}{misc}
+\DeclareBibliographyAlias{customb}{misc}
+
+\renewcommand*{\finalnamedelim}{%
+  \ifcitation{
+    \ifnumgreater{\value{liststop}}{2}{\finalandcomma}{}%
+    \addspace\bibstring{and}\space%
+  }{
+    \ifentrytype{customa}{%
+      \ifnumgreater{\value{liststop}}{2}{\finalandcomma}{}%
+      \addspace\bibstring{and}\space%
+    }{%
+      \finalandcomma\addspace%
+    }%
+  }%
+}
+%  \ifentrytype{customa}{\ifnumgreater{\value{liststop}}{2}{\finalandcomma}{}%
+%   \addspace\bibstring{and}\space}{\finalandcomma\addspace}}
+\renewcommand*{\bibfont}{\footnotesize}
+
+%\DeclareDelimFormat[cbx@textcite]{finalnamedelim}%
+\renewcommand*{\compcitedelim}{%
+  \iflastcitekey{%
+    \ifnumgreater{\value{liststop}}{2}{\finalandcomma}{}%
+     \addspace\bibstring{and}\space}{%
+    \addcomma\space}}
+

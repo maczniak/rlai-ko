@@ -1,0 +1,21 @@
+
+\definecolor{box-background}{RGB}{242,242,242}
+\definecolor{box-frame}{RGB}{64,64,64}
+\newenvironment{rbox}[1]{\begin{tcolorbox}[colback=box-background,colframe=box-frame,title=\textbf{#1}]}{\end{tcolorbox}}
+
+\newtheoremstyle{rlai}%
+  {\topsep}{\topsep}%
+  {\normalfont}{0pt}%
+  {\bfseries}{ }%
+  {5pt plus 1pt minus 1pt}%
+  {{\bfseries\thmname{#1} \thmnumber{#2}:} \thmnote{\itshape#3}}
+\theoremstyle{rlai}
+\newtheorem{exercise}{연습 문제}[chapter]
+\AtEndEnvironment{exercise}{\null\hfill\ensuremath{\square}}
+\newtheorem{example}{사례}[chapter]
+\AtEndEnvironment{example}{\null\hfill\ensuremath{\blacksquare}}
+
+\oblivoirchapterstyle{default}
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+
