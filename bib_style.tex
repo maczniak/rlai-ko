@@ -20,14 +20,5 @@
     }%
   }%
 }
-%  \ifentrytype{customa}{\ifnumgreater{\value{liststop}}{2}{\finalandcomma}{}%
-%   \addspace\bibstring{and}\space}{\finalandcomma\addspace}}
 \renewcommand*{\bibfont}{\footnotesize}
-
-%\DeclareDelimFormat[cbx@textcite]{finalnamedelim}%
-\renewcommand*{\compcitedelim}{%
-  \iflastcitekey{%
-    \ifnumgreater{\value{liststop}}{2}{\finalandcomma}{}%
-     \addspace\bibstring{and}\space}{%
-    \addcomma\space}}
 

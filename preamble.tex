@@ -1,21 +1,33 @@
 
 \definecolor{box-background}{RGB}{242,242,242}
 \definecolor{box-frame}{RGB}{64,64,64}
-\newenvironment{rbox}[1]{\begin{tcolorbox}[colback=box-background,colframe=box-frame,title=\textbf{#1}]}{\end{tcolorbox}}
+\newenvironment{rbox}[2]{\begin{tcolorbox}[colback=box-background,colframe=box-frame,title=\textbf{#1},float=#2]}{\end{tcolorbox}}
 
-\newtheoremstyle{rlai}%
+\newtheoremstyle{rlai-exercise}%
   {\topsep}{\topsep}%
   {\normalfont}{0pt}%
   {\bfseries}{ }%
   {5pt plus 1pt minus 1pt}%
   {{\bfseries\thmname{#1} \thmnumber{#2}:} \thmnote{\itshape#3}}
-\theoremstyle{rlai}
+\theoremstyle{rlai-exercise}
 \newtheorem{exercise}{연습 문제}[chapter]
 \AtEndEnvironment{exercise}{\null\hfill\ensuremath{\square}}
+
+\newtheoremstyle{rlai-example}%
+  {\topsep}{\topsep}%
+  {\normalfont}{0pt}%
+  {\bfseries}{ }%
+  {5pt plus 1pt minus 1pt}%
+  {\bfseries\thmname{#1} \thmnumber{#2}: \thmnote{#3}}
+\theoremstyle{rlai-example}
 \newtheorem{example}{사례}[chapter]
 \AtEndEnvironment{example}{\null\hfill\ensuremath{\blacksquare}}
 
 \oblivoirchapterstyle{default}
 
 \DeclareMathOperator*{\argmax}{arg\,max}
+
+\newcommand{\bi}[1]{\multido{}{#1}{\hspace*{1.6em}}}
+
+\newcommand{\textoverline}[1]{$\overline{\mbox{#1}}$}
 
